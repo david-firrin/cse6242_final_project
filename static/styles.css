@@ -1,0 +1,253 @@
+body {
+  background-color: rgb(56, 62, 84);
+}
+
+.header {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  top: 0;
+  left: 0;
+  background-image: url("images/car_header.png");
+  background-size: cover;
+  background-position: center center;
+  border-bottom-right-radius: 30%;
+  border-bottom-left-radius: 30%;
+  border-bottom: 5px solid #000000;
+}
+
+.title {
+  position: absolute;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 90px;
+  color: white;
+  text-shadow: 1px 1px 5px black;
+  margin-top: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.catchphrase {
+  position: absolute;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 30px;
+  color: white;
+  text-shadow: 1px 1px 5px black;
+  top: 120px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.icon {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  top: 180px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  width: 125px;
+  background-color: blue;
+  border: 5px solid black;
+  border-radius: 50%;
+}
+
+.icon img {
+  mix-blend-mode: multiply;
+  height: 100px;
+}
+
+.inputs {
+  margin: 70px auto;
+  padding: 40px;
+  border: 3px solid black;
+  border-radius: 25px;
+  display: grid;
+  grid-template-rows: 1fr repeat(2, 1fr) 1.5fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  width: 80%;
+  /* set width of parent div */
+  /* center div horizontally */
+}
+.inputs .input-title {
+  grid-column: 1/4;
+}
+.inputs .input-title h3 {
+  text-align: center;
+  color: white;
+  margin: 0 auto;
+}
+.inputs .input-1 {
+  grid-column: 1/2;
+}
+.inputs .input-2 {
+  grid-column: 2/3;
+}
+.inputs .input-3 {
+  grid-column: 3/4;
+}
+.inputs button {
+  grid-column: 2/3;
+}
+
+.custom-select {
+  background-color: grey;
+  /* change to desired background color */
+  color: white;
+}
+
+.btn-text {
+  font-size: 25px;
+  margin: 10px auto;
+  margin-bottom: 0;
+  width: 80%;
+  border-radius: 20px;
+}
+
+.btn-loading {
+  background-color: #7a7a7a;
+  color: white;
+  cursor: progress;
+}
+
+.btn-loading:after {
+  content: "";
+  animation: spin 0.5s linear infinite;
+  border: 2px solid white;
+  border-top-color: transparent;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#analysis_template {
+  margin: 70px auto;
+  text-align: center;
+}
+
+.analysis_container {
+  display: none;
+  margin: 0 auto;
+  padding: 10px;
+  border: 3px solid black;
+  border-radius: 25px;
+  grid-template-rows: 0.1fr repeat(3, 0.35fr) 0.2fr 1.05fr 0.2fr;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+  width: 90%;
+  height: 1500px;
+}
+.analysis_container .model-header {
+  grid-column: 1/6;
+}
+.analysis_container .model-header h2 {
+  text-align: center;
+  color: white;
+  margin: 0 auto;
+}
+.analysis_container .car_container {
+  grid-column: 1/3;
+  grid-row: 2/5;
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: lightblue;
+}
+.analysis_container .car_container img {
+  height: 100%;
+  mix-blend-mode: multiply;
+  border-radius: 10px;
+  color: white;
+}
+.analysis_container .actual_price {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  border-radius: 10px;
+}
+.analysis_container .predicted_price {
+  grid-column: 2/3;
+  grid-row: 3/4;
+  border-radius: 10px;
+}
+.analysis_container .car_value_assessment {
+  grid-column: 2/3;
+  grid-row: 4/5;
+  border-radius: 10px;
+}
+.analysis_container .predicted_price,
+.analysis_container .actual_price,
+.analysis_container .car_value_assessment {
+  display: flex;
+  margin: 5px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 3px solid black;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 24px;
+  color: white;
+  background-color: rgb(56, 62, 84);
+}
+.analysis_container .PD_model {
+  grid-column: 4/6;
+  grid-row: 2/5;
+  border: 2px solid white;
+  border-radius: 10px;
+  color: white;
+}
+.analysis_container .PD_model_explanation {
+  padding: 10px;
+  color: white;
+  grid-column: 4/6;
+  grid-row: 5/6;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+.analysis_container .residuals_model {
+  grid-row: 6/8;
+  grid-column: 4/6;
+  border: 2px solid white;
+  border-radius: 10px;
+  color: white;
+}
+.analysis_container .residuals_model_explanation {
+  padding: 10px;
+  color: white;
+  grid-column: 4/6;
+  grid-row: 8/9;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+
+.actual-price,
+.predicted-price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f7f7f7;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}/*# sourceMappingURL=styles.css.map */
