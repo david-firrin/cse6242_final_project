@@ -2,6 +2,14 @@
 
 Clone the repo, and navigate to the directory in your terminal and enter: 
 
+python3 -m venv env
+
+Then enter:
+
+source env/bin/activate
+
+Next enter:
+
 pip install -r requirements.txt
 
 Next, enter:
