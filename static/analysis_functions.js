@@ -35,10 +35,9 @@ assessment_value_element.innerHTML = priceAssessmentValue.toLocaleString('en-US'
 
 
 
+
+
 deal_assessment = car_value_prediction_data['deal_assessment']
-
-
-
 
 var header = document.querySelector('.model-header h2');
 header.innerHTML = `Based on the information you provided, this car is a ${deal_assessment} deal!`
