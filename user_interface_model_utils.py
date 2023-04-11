@@ -160,7 +160,7 @@ class UserInterfaceModelUtils:
         if X[0] <= 5:
             importance = [('miles_10k', '+')] + importance
         elif X[0] >= 35:
-            importance = [('miles_10k', '-')] + importance    
+            importance = [('miles_10k', '-')] + importance  
 
         if X[1] <= 2:
             importance = [('car_age_years', '+')] + importance
@@ -177,4 +177,15 @@ class UserInterfaceModelUtils:
         elif X[6] in self.models_top['smallest']:
             importance = [('model', '-')] + importance
 
-        return importance[:n_vars]
+        importance = importance[:n_vars]
+        return {
+            i: {'variable': v[0], 'effect': v[1]} 
+            for i, v in enumerate(importance)
+        }
+    
+    def predict(self, X: List):
+
+        X = self.__convert_user_input_to_data_vector__(X)
+        prediction = self.gam.predict(X.reshape(1, -1))[0]
+        return {'prediction': prediction}
+
