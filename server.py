@@ -33,9 +33,11 @@ def home():
         car_value_prediction = Server_Analyze().PredictCarPrice(request.form)
         plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(request.form)
         plot_residuals = Server_Analyze().PlotResiduals(request.form)
+        important_parameters = Server_Analyze().GetCarParameters(request.form)
         return jsonify(car_value_prediction=car_value_prediction,
                        plot_mileage_age_curves=plot_mileage_age_curves,
-                       plot_residuals = plot_residuals)
+                       plot_residuals=plot_residuals,
+                       important_parameters = important_parameters)
 
     if request.method == 'GET':
         # <!-- miles_10kx  car_age_yearsx  conditionx  title_status  fuelx  typex  modelx  manufacturerx  cylindersx  drive  transmission  paint_color        long        lat -->
@@ -49,13 +51,14 @@ def home():
         car_cylinders = sorted(df['cylinders'].unique())
         car_fuel = sorted(df['fuel'].unique())
 
-        return render_template("index.html", form=form,
+        return render_template("index.html",
+                               form=form,
                                car_manufacturers=car_manufacturers,
                                car_models=car_models,
                                car_types=car_types,
                                car_cylinders=car_cylinders,
-                               car_fuel = car_fuel)
+                               car_fuel=car_fuel)
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=5000, debug=True)
+    app.run(host="localhost", port=4500, debug=True)

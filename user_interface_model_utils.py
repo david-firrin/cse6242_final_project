@@ -5,6 +5,7 @@ from numpy import abs as np_abs
 from numpy import array, ndarray
 from pandas import DataFrame
 from typing import List
+import pdb
 
 class UserInterfaceModelUtils:
 
@@ -102,7 +103,7 @@ class UserInterfaceModelUtils:
         }, index=[0])
 
         cluster = int(self.k_means_coords.predict(coords))
-
+        
         return array([
             float(X[0]), 
             float(X[1]), 

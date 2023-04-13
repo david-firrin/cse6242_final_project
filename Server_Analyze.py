@@ -6,9 +6,10 @@ from pygam import GAM, GammaGAM
 import pdb
 from sklearn.model_selection import train_test_split
 import random
+from user_interface_model_utils import UserInterfaceModelUtils
 
 
-class Server_Analyze:
+class Server_Analyze(UserInterfaceModelUtils):
     def __init__(self):
         with open('data/transform/step_3_GAM_model/gam_1.pkl', 'rb') as f_gam:
             self.gam_model = pickle.load(f_gam)
@@ -52,47 +53,74 @@ class Server_Analyze:
         car_miles = float(form_request['car_miles'])
         car_year = float(form_request['car_year'])
 
-        df = pd.DataFrame({'miles_10k': [car_miles],  # Necessary
-                           'car_age_years': [car_year],  # Necessary
-                           'condition': [car_condition],  # Necessary
-                           'model': [car_model],  # Necessary
-                           'manufacturer': [car_manufacturer],  # Necessary
-                           'title_status': ['clean'],  # Necessary
-                           'fuel': ['gas'],  # Necessary
-                           'type': ['pickup'],  # Necessary
-                           'cylinders': ['8 cylinders'],  # Necessary
-                           'drive': ['rwd'],  # Necessary
-                           'transmission': ['other'],  # Necessary
-                           'paint_color': ['red'],  # Necessary
-                           'long': [-85.4800],
-                           'lat': [32.590]
-                           })
-        df = df[['miles_10k', 'car_age_years']+factor_vars+['long', 'lat']]
+        # df = pd.DataFrame({'miles_10k': [car_miles],  # Necessary
+        #                    'car_age_years': [car_year],  # Necessary
+        #                    'condition': [car_condition],  # Necessary
+        #                    'model': [car_model],  # Necessary
+        #                    'manufacturer': [car_manufacturer],  # Necessary
+        #                    'title_status': ['clean'],  # Necessary
+        #                    'fuel': ['gas'],  # Necessary
+        #                    'type': ['pickup'],  # Necessary
+        #                    'cylinders': ['8 cylinders'],  # Necessary
+        #                    'drive': ['rwd'],  # Necessary
+        #                    'transmission': ['other'],  # Necessary
+        #                    'paint_color': ['red'],  # Necessary
+        #                    'long': [-85.4800],
+        #                    'lat': [32.590]
+        #                    })
+
+        # df = df[['miles_10k', 'car_age_years']+factor_vars+['long', 'lat']]
         # apply the label encodings to the new data
-        for col, encoder in label_encoders.items():
-            try:
-                df[col] = encoder.transform(df[col])
-            except ValueError:
-                df[col] = np.nan
-        return df
+        # for col, encoder in label_encoders.items():
+        #     try:
+        #         df[col] = encoder.transform(df[col])
+        #     except ValueError:
+        #         df[col] = np.nan
+        X = [car_miles,
+             car_year,
+             car_condition,
+             'clean', # title status
+             'gas', # fuel
+             'pickup', # type
+             car_model,
+             car_manufacturer,
+             '8 cylinders', # cylinders
+             'rwd', #drive
+             'other', #transmission
+             'red', # paint color
+             -85.4800,
+             32.590]
+
+        return X
+
+    def GetCarParameters(self, form_request):
+        
+        encoded_data = self.encode_data(form_request)
+        pdb.set_trace()
+        important_parameters = UserInterfaceModelUtils(assets_path='user_interface_utils_assets').get_n_most_important_variables(encoded_data)
+        return important_parameters
 
     def PredictCarPrice(self, form_request):
         '''
         miles_10k  car_age_years  condition  title_status  fuel  type  model  manufacturer  cylinders  drive  transmission  paint_color        long        lat
         '''
         encoded_data = self.encode_data(form_request)
-        y_test_pred = self.gam_model.predict(encoded_data)
-        predicted_car_price = round(float(y_test_pred[0]))
+        # y_test_pred = self.gam_model.predict(encoded_data)
+        # predicted_car_price = round(float(y_test_pred[0]))
+        
+        predicted_car_price = UserInterfaceModelUtils(assets_path='user_interface_utils_assets').predict(encoded_data)
+
         # Calculate whether car is a good or bad deal:
         user_inputted_car_price = float(form_request['car_value'])
-        if predicted_car_price > user_inputted_car_price:
-            deal_assessment = 'good'
-        elif predicted_car_price < user_inputted_car_price:
-            deal_assessment = 'bad'
+
+        # if predicted_car_price > user_inputted_car_price:
+        #     deal_assessment = 'good'
+        # elif predicted_car_price < user_inputted_car_price:
+        #     deal_assessment = 'bad'
         car_value_prediction = {
             'predicted_car_price': predicted_car_price,
             'user_inputted_car_price': user_inputted_car_price,
-            'deal_assessment': deal_assessment
+            'deal_assessment': 'good'
         }
         return car_value_prediction
 
