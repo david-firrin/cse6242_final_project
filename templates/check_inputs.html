@@ -1,0 +1,23 @@
+<form id="my-form" class="inputs">
+    <div class="input-title">
+        <h2>Please Enter Your Car Details Below</h2>
+    </div>
+    <div class="input">
+        <h3>Looks good!</h3>
+
+
+        <button type="submit" id="last-page-btn" name={{ form_data.last_page }} class="btn btn-primary btn-text"
+            onclick="handleLast(event)">
+            Go Back
+        </button>
+        <button type="submit" id="next-page-btn" name={{ form_data.next_page }} class="btn btn-primary btn-text"
+            onclick="handleNext(event)">
+            Next
+        </button>
+    </div>
+</form>
+
+<script>
+    var data = JSON.parse('{{ form_data | tojson | safe }}');
+    console.log(data);
+</script>

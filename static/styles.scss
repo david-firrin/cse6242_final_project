@@ -61,7 +61,7 @@ body {
     height: 100px;
 }
 
-.inputs {
+#main .inputs {
     // background-color: green;
     // position: relative;
     margin: 70px auto;
@@ -73,6 +73,7 @@ body {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     width: 80%;
+    // height: 50px;
     /* set width of parent div */
     // margin: 0 auto;
     /* center div horizontally */
@@ -82,6 +83,12 @@ body {
         // border-radius: 20px;
         grid-column: 1/4;
 
+        & h2 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
         & h3 {
             text-align: center;
             color: white;
@@ -89,22 +96,12 @@ body {
         }
     }
 
-    & .input-1 {
-        grid-column: 1/2;
-
+    & .form-inputs {
+        grid-column: 1/4;
+        text-align: center;
     }
 
-    & .input-2 {
-        grid-column: 2/3;
-    }
 
-    & .input-3 {
-        grid-column: 3/4;
-    }
-
-    & button {
-        grid-column: 2/3;
-    }
 }
 
 .custom-select {
@@ -157,7 +154,7 @@ body {
 }
 
 .analysis_container {
-    display: none;
+    display: grid;
     margin: 0 auto;
     padding: 10px;
     border: 3px solid black;

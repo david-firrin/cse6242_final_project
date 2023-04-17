@@ -27,91 +27,47 @@ class Server_Analyze(UserInterfaceModelUtils):
         self.y_test = test['price']
         # return X_train, X_test, y_train, y_test
 
-    def encode_data(self, form_request):
-        factor_vars = [
-            'condition',
-            'title_status',
-            'fuel',
-            'type',
-            'model',
-            'manufacturer',
-            'cylinders',
-            'drive',
-            'transmission',
-            'paint_color'
-        ]
-        # Load Label Encoders
-        # pdb.set_trace()
-        with open('data/transform/step_2_preprocessed_data/df_label_encoders.pkl', 'rb') as f_label_encoders:
-            label_encoders = pickle.load(f_label_encoders)
+    def encode_data(self, session, as_list=True):
+        form_data = {
+            'car_miles': session['car_miles'],  # car miles
+            'car_years': session['car_years'],  # car year
+            'car_condition': session['car_condition'],  # car condition
+            'car_title': 'clean',  # title status
+            'car_fuel': session['car_fuel'],  # fuel
+            'car_type': session['car_type'],  # type
+            'car_model': session['car_model'],  # car model
+            'car_manufacturer': session['car_manufacturer'], # car manufacturer
+            'car_cylinders': session['car_cylinders'],  # cylinders
+            'car_drive': session['car_drive'],  # drive
+            'car_transmission': session['car_transmission'],  # transmission
+            'car_color': session['car_color'],  # paint color
+            'longitude': -85.4800,  # longitude
+            'latitude': 32.590  # latitude
+        }
+        if as_list == True:
+            form_data = list(form_data.values())
+        return form_data
+       
 
-        # Impute Missing Data
-        car_manufacturer = form_request['car_manufacturer']
-        car_model = form_request['car_model']
-        car_condition = form_request['car_condition']
-        # car_value = float(form_request['car_value'])
-        car_miles = float(form_request['car_miles'])
-        car_year = float(form_request['car_year'])
-
-        # df = pd.DataFrame({'miles_10k': [car_miles],  # Necessary
-        #                    'car_age_years': [car_year],  # Necessary
-        #                    'condition': [car_condition],  # Necessary
-        #                    'model': [car_model],  # Necessary
-        #                    'manufacturer': [car_manufacturer],  # Necessary
-        #                    'title_status': ['clean'],  # Necessary
-        #                    'fuel': ['gas'],  # Necessary
-        #                    'type': ['pickup'],  # Necessary
-        #                    'cylinders': ['8 cylinders'],  # Necessary
-        #                    'drive': ['rwd'],  # Necessary
-        #                    'transmission': ['other'],  # Necessary
-        #                    'paint_color': ['red'],  # Necessary
-        #                    'long': [-85.4800],
-        #                    'lat': [32.590]
-        #                    })
-
-        # df = df[['miles_10k', 'car_age_years']+factor_vars+['long', 'lat']]
-        # apply the label encodings to the new data
-        # for col, encoder in label_encoders.items():
-        #     try:
-        #         df[col] = encoder.transform(df[col])
-        #     except ValueError:
-        #         df[col] = np.nan
-        X = [car_miles,
-             car_year,
-             car_condition,
-             'clean', # title status
-             'gas', # fuel
-             'pickup', # type
-             car_model,
-             car_manufacturer,
-             '8 cylinders', # cylinders
-             'rwd', #drive
-             'other', #transmission
-             'red', # paint color
-             -85.4800,
-             32.590]
-
-        return X
-
-    def GetCarParameters(self, form_request):
-        
-        encoded_data = self.encode_data(form_request)
-        pdb.set_trace()
-        important_parameters = UserInterfaceModelUtils(assets_path='user_interface_utils_assets').get_n_most_important_variables(encoded_data)
+    def GetCarParameters(self, session):
+        encoded_data = self.encode_data(session)
+        important_parameters = UserInterfaceModelUtils(
+            assets_path='user_interface_utils_assets').get_n_most_important_variables(encoded_data)
         return important_parameters
 
-    def PredictCarPrice(self, form_request):
+    def PredictCarPrice(self, session):
         '''
         miles_10k  car_age_years  condition  title_status  fuel  type  model  manufacturer  cylinders  drive  transmission  paint_color        long        lat
         '''
-        encoded_data = self.encode_data(form_request)
+        encoded_data = self.encode_data(session)
         # y_test_pred = self.gam_model.predict(encoded_data)
         # predicted_car_price = round(float(y_test_pred[0]))
-        
-        predicted_car_price = UserInterfaceModelUtils(assets_path='user_interface_utils_assets').predict(encoded_data)
+
+        predicted_car_price = UserInterfaceModelUtils(
+            assets_path='user_interface_utils_assets').predict(encoded_data)
 
         # Calculate whether car is a good or bad deal:
-        user_inputted_car_price = float(form_request['car_value'])
+        user_inputted_car_price = float(session['car_value'])
 
         # if predicted_car_price > user_inputted_car_price:
         #     deal_assessment = 'good'
@@ -165,21 +121,21 @@ class Server_Analyze(UserInterfaceModelUtils):
         }
         return plot_mileage_age_curves
 
-    def PlotResiduals(self, form_request):
-        y_train_hat = self.gam_model.predict_mu(self.X_train)
-        residuals = self.gam_model.deviance_residuals(
-            self.X_train, self.y_train)
+    # def PlotResiduals(self, form_request):
+    #     y_train_hat = self.gam_model.predict_mu(self.X_train)
+    #     residuals = self.gam_model.deviance_residuals(
+    #         self.X_train, self.y_train)
 
-        # random_resid_idxs = random.sample(range(len(residuals)), 10)
-        # residuals_subset = [residuals[i] for i in random_resid_idxs]
+    #     # random_resid_idxs = random.sample(range(len(residuals)), 10)
+    #     # residuals_subset = [residuals[i] for i in random_resid_idxs]
 
-        # pdb.set_trace()
-        plot_residuals = {
-            # 'X_train': self.X_train,
-            # 'X_test': self.X_test,
-            # 'Y_train': self.y_train,
-            # 'Y_test': self.y_test,
-            'y_train_hat': y_train_hat.tolist(),
-            'residuals': residuals.tolist()
-        }
-        return plot_residuals
+    #     # pdb.set_trace()
+    #     plot_residuals = {
+    #         # 'X_train': self.X_train,
+    #         # 'X_test': self.X_test,
+    #         # 'Y_train': self.y_train,
+    #         # 'Y_test': self.y_test,
+    #         'y_train_hat': y_train_hat.tolist(),
+    #         'residuals': residuals.tolist()
+    #     }
+    #     return plot_residuals

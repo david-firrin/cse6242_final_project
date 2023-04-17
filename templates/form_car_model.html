@@ -1,0 +1,19 @@
+<div class="input-title">
+    <h2>Please Select a Car Model</h2>
+</div>
+<div class="input">
+    <select class="custom-select" name={{ form.car_model.name }}>
+        <option selected>{{ form.car_model.label }}</option>
+        {% for car_model in car_models %}
+        <option value={{ manufacturer }}>{{ car_model }}</li>
+            {% endfor %}
+    </select>
+    <button type="submit" id="next-page-btn" name="get_started" value="get_model" class="btn btn-primary btn-text">
+        Submit
+    </button>
+</div>
+
+<script>
+    var data = JSON.parse('{{ car_models | tojson | safe }}');
+    console.log(data);
+</script>

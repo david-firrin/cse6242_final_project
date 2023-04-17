@@ -1,20 +1,43 @@
-{% extends "index.html" %}
+<form id="my-form" class="inputs">
+    <div class="input-title">
+        <h2>Let's get started in analyzing the price of your car!</h2>
+    </div>
+    <button type="submit" id="next-page-btn" name="car_manufacturer" class=" btn btn-primary btn-text"
+        onclick="handleNext(event)">
+        Re-Analyze
+    </button>
+</form>
 
-{% block content %}
-<p>Another test</p>
-<!-- <div class="analysis_container">
+<div class=" analysis_container">
     <div class="model-header">
-        <h3>Based on the information you provided, this car is a great deal!</h3>
+        <h2></h2>
     </div>
-    <div class="model-1">
-        <canvas id="myChart"></canvas>
+    <div class="car_container">
+        <img src="static/images/car_figure.png" alt="car_icon">
     </div>
-    <div class="model-2">
-        <p></p>
+    <div class="actual_price">
+        <span class="label">Actual Car Price</span>
+        <span class="value"></span>
     </div>
-    <div class="model-3">
-        <p></p>
+    <div class="predicted_price">
+        <span class="label">Predicted Car Price</span>
+        <span class="value"></span>
     </div>
-</div> -->
-{% endblock %}
+    <div class="car_value_assessment">
+        <span class="label">Assessment</span>
+        <span class="value"></span>
+    </div>
 
+    <div class="PD_model">
+        <canvas id="plot_mileage_age_curve_exp"></canvas>
+    </div>
+    <div class="PD_model_explanation">
+        <p>Plot Mileage/Age Curve Model Explanation</p>
+    </div>
+    <div class="residuals_model">
+        <canvas id="residuals_model"></canvas>
+    </div>
+    <div class="residuals_model_explanation">
+        <p>Residuals Model Explanation</p>
+    </div>
+</div>

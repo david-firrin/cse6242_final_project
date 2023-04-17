@@ -59,7 +59,7 @@ body {
   height: 100px;
 }
 
-.inputs {
+#main .inputs {
   margin: 70px auto;
   padding: 40px;
   border: 3px solid black;
@@ -72,25 +72,22 @@ body {
   /* set width of parent div */
   /* center div horizontally */
 }
-.inputs .input-title {
+#main .inputs .input-title {
   grid-column: 1/4;
 }
-.inputs .input-title h3 {
+#main .inputs .input-title h2 {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+#main .inputs .input-title h3 {
   text-align: center;
   color: white;
   margin: 0 auto;
 }
-.inputs .input-1 {
-  grid-column: 1/2;
-}
-.inputs .input-2 {
-  grid-column: 2/3;
-}
-.inputs .input-3 {
-  grid-column: 3/4;
-}
-.inputs button {
-  grid-column: 2/3;
+#main .inputs .form-inputs {
+  grid-column: 1/4;
+  text-align: center;
 }
 
 .custom-select {
@@ -141,7 +138,7 @@ body {
 }
 
 .analysis_container {
-  display: none;
+  display: grid;
   margin: 0 auto;
   padding: 10px;
   border: 3px solid black;
