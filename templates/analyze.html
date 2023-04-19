@@ -1,43 +1,135 @@
-<form id="my-form" class="inputs">
-    <div class="input-title">
-        <h2>Let's get started in analyzing the price of your car!</h2>
-    </div>
-    <button type="submit" id="next-page-btn" name="car_manufacturer" class=" btn btn-primary btn-text"
-        onclick="handleNext(event)">
-        Re-Analyze
-    </button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class=" analysis_container">
-    <div class="model-header">
-        <h2></h2>
-    </div>
-    <div class="car_container">
-        <img src="static/images/car_figure.png" alt="car_icon">
-    </div>
-    <div class="actual_price">
-        <span class="label">Actual Car Price</span>
-        <span class="value"></span>
-    </div>
-    <div class="predicted_price">
-        <span class="label">Predicted Car Price</span>
-        <span class="value"></span>
-    </div>
-    <div class="car_value_assessment">
-        <span class="label">Assessment</span>
-        <span class="value"></span>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/styles.css">
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="banner"></div>
+        <div class="title">AutoAdvisor</div>
+        <div class="catchphrase">Buy smarter, not harder.</div>
+        <div class="icon">
+            <img src="static/images/car_icon.png" alt="car_icon">
+        </div>
     </div>
 
-    <div class="PD_model">
-        <canvas id="plot_mileage_age_curve_exp"></canvas>
+    <form id="my-form" class="inputs">
+        <div class="input-title">
+            <h2>Let's get started in analyzing the price of your car!</h2>
+        </div>
+        <button type="submit" id="next-page-btn" name="car_manufacturer" class=" btn btn-primary btn-text"
+            onclick="handleNext(event)">
+            Re-Analyze
+        </button>
+    </form>
+
+    <div class="analysis_container">
+        <div class="model-header">
+            <h2></h2>
+        </div>
+        <div id="recommendation"></div>
+        <div class="car_parameters_container">
+        </div>
+        <div class="car_image_container">
+            <img src="static/images/car_figure.png" alt="car_icon">
+        </div>
+        <div id="input_car_manufacturer_model_type"></div>
+
+        <div id="inputted_car_year">
+            <h5>Car Year</h5>
+            <span id="inputted_car_year_text"></span>
+        </div>
+        <div id="inputted_car_miles">
+            <h5>Total Miles</h5>
+            <span id="inputted_car_miles_text"></span>
+        </div>
+        <div id="inputted_car_transmission">
+            <h5>Transmission</h5>
+            <span id="inputted_car_transmission_text"></span>
+        </div>
+        <div id="inputted_car_cylinders">
+            <h5>Cylinders</h5>
+            <span id="inputted_car_cylinders_text"></span>
+        </div>
+        <div id="inputted_car_condition">
+            <h5>Condition</h5>
+            <span id="inputted_car_condition_text"></span>
+        </div>
+
+        <div class="actual_price">
+            <span class="label">Your Car Price</span>
+            <span class="label_explanation">This is the value you provided us for the vehicle.</span>
+            <span class="value"></span>
+        </div>
+        <div class="predicted_price">
+            <span class="label">Predicted Car Price</span>
+            <span class="label_explanation">This is the estimated value of the vehicle based on our model.</span>
+            <span class="value"></span>
+        </div>
+        <div class="car_value_assessment">
+            <span class="label">Car Price Assessment</span>
+            <span class="label_explanation">This is our assessment on the vehicle's price against our model.</span>
+            <span class="value"></span>
+        </div>
+        <div class="car_anomoly_assessment">
+            <span class="label">Anomoly Assessment</span>
+            <span class="label_explanation">This is our assessment on the vehicle's price against our model.</span>
+            <span class="value">None Detected!</span>
+        </div>
+        <div class="PD_model">
+            <canvas id="plot_mileage_age_curve_exp"></canvas>
+        </div>
+        <div class="PD_model_explanation">
+            <p>The above chart shows how the listing price of a car decreases with respect to its odometer reading and
+                age.
+            </p>
+        </div>
+        <div id="kpi_title">
+            <h5>Key Price Influencers</h5>
+            <p>These are the most influential variables affecting your car's price based on our model.</p>
+        </div>
+        <div id="kpi_1">
+            <h4 id="kpi_1_variable"></h4>
+            <p id="kpi_1_variable_explanation"></p>
+        </div>
+        <div id="kpi_1_variable_exp"></div>
+
+        <div id="kpi_2">
+            <h4 id="kpi_2_variable"></h4>
+            <p id="kpi_2_variable_explanation"></p>
+        </div>
+        <div id="kpi_2_variable_exp"></div>
+        <div id="kpi_3">
+            <h4 id="kpi_3_variable"></h4>
+            <p id="kpi_3_variable_explanation"></p>
+        </div>
+        <div id="kpi_3_variable_exp"></div>
+        <div id="kpi_4">
+            <h4 id="kpi_4_variable"></h4>
+            <p id="kpi_4_variable_explanation"></p>
+        </div>
+        <div id="kpi_4_variable_exp"></div>
     </div>
-    <div class="PD_model_explanation">
-        <p>Plot Mileage/Age Curve Model Explanation</p>
-    </div>
-    <div class="residuals_model">
-        <canvas id="residuals_model"></canvas>
-    </div>
-    <div class="residuals_model_explanation">
-        <p>Residuals Model Explanation</p>
-    </div>
-</div>
+    <script>
+        var data = JSON.parse('{{ form_data | tojson | safe }}');
+
+    </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="static/analysis_functions.js"></script>
+    <script type="text/javascript" src="static/graphs/plot_mileage_age_curve_exp.js"></script>
+
+</body>
+
+</html>

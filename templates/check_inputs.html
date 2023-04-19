@@ -1,21 +1,100 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+        integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+
+<body>
+    <div class="header">
+        <div class="banner"></div>
+        <div class="title">AutoAdvisor</div>
+        <div class="catchphrase">Buy smarter, not harder.</div>
+        <div class="icon">
+            <img src="static/images/car_icon.png" alt="car_icon">
+        </div>
+    </div>
+    <div id="main"> -->
+
 <form id="my-form" class="inputs">
     <div class="input-title">
-        <h2>Please Enter Your Car Details Below</h2>
+        <h2>Take a quick look and double check the car details you gave us below.</h2>
+        <p>Whenever you're good to go, hit the 'analyze' button and we'll give you our best guess on what your
+            car's worth!</p>
     </div>
-    <div class="input">
-        <h3>Looks good!</h3>
+    <div class="provided_inputs">
+        <div>
+            <label>Your car's manufacturer</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_manufacturer }}</div>
+        </div>
+        <div>
+            <label>Your car's model</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_model }}</div>
+        </div>
+        <div>
+            <label>Your car's type</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_type|title }}</div>
+        </div>
+        <div>
+            <label>Your car's fuel type</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_fuel|title }}</div>
+        </div>
+        <div>
+            <label>Your car's number of cylinders</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_cylinders|title }}</div>
+        </div>
+        <div>
+            <label>Your car's drive</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_drive|upper }}</div>
+        </div>
+        <div>
+            <label>Your car's transmission</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_transmission|capitalize }}</div>
+        </div>
+        <div>
+            <label>The color of your car</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_color|capitalize }}</div>
+        </div>
+        <div>
+            <label>The condition of your car</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_condition|capitalize }}</div>
+        </div>
+        <div>
+            <label>The price of your car</label>
+            <div class="provided_inputs-1">{{ "$%.2f"|format(form_data.inputs.car_value|float) }}</div>
+        </div>
+        <div>
+            <label>The number of miles on your car</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_miles }}</div>
+        </div>
+        <div>
+            <label>Your car's year</label>
+            <div class="provided_inputs-1">{{ form_data.inputs.car_years }}</div>
+        </div>
+    </div>
 
-
+    <div class="buttons">
         <button type="submit" id="last-page-btn" name={{ form_data.last_page }} class="btn btn-primary btn-text"
             onclick="handleLast(event)">
             Go Back
         </button>
         <button type="submit" id="next-page-btn" name={{ form_data.next_page }} class="btn btn-primary btn-text"
             onclick="handleNext(event)">
-            Next
+            Analyze
         </button>
     </div>
 </form>
+<!-- </div> -->
+<!-- </body> -->
 
 <script>
     var data = JSON.parse('{{ form_data | tojson | safe }}');

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="static/styles.css">
+
 </head>
 
 <body>
@@ -34,42 +35,6 @@
             </button>
         </form>
     </div>
-    <!-- <div class=" analysis_container">
-        <div class="model-header">
-            <h2></h2>
-        </div>
-        <div class="car_container">
-            <img src="static/images/car_figure.png" alt="car_icon">
-        </div>
-        <div class="actual_price">
-            <span class="label">Actual Car Price</span>
-            <span class="value"></span>
-        </div>
-        <div class="predicted_price">
-            <span class="label">Predicted Car Price</span>
-            <span class="value"></span>
-        </div>
-        <div class="car_value_assessment">
-            <span class="label">Assessment</span>
-            <span class="value"></span>
-        </div>
-
-        <div class="PD_model">
-            <canvas id="plot_mileage_age_curve_exp"></canvas>
-        </div>
-        <div class="PD_model_explanation">
-            <p>Plot Mileage/Age Curve Model Explanation</p>
-        </div>
-        <div class="residuals_model">
-            <canvas id="residuals_model"></canvas>
-        </div>
-        <div class="residuals_model_explanation">
-            <p>Residuals Model Explanation</p>
-        </div>
-    </div> -->
-
-
-
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -81,64 +46,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-
-    <script>
-        function handleNext(event) {
-            event.preventDefault(); // prevent the form from submitting normally
-            var form = document.getElementById("my-form");
-            console.log(form)
-            // Get the Button value
-            var button_name = document.getElementById('next-page-btn').name
-            // create an object to hold the form data
-            var formData = new FormData(form);
-            console.log(formData);
-            formData.append('page', button_name)
-            formData.append('direction', 'next')
-
-            // log the form data to the console for debugging
-            console.log(formData);
-
-            // send the form data to the Flask server using fetch
-            fetch('/', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.text())
-                .then(responseData => {
-                    // replace the current form page with the new one
-                    document.getElementById('main').innerHTML = responseData;
-                })
-                .catch(error => console.error(error));
-        };
-        function handleLast(event) {
-            event.preventDefault(); // prevent the form from submitting normally
-            var form = document.getElementById("my-form");
-            console.log(form)
-            // Get the Button value
-            var button_name = document.getElementById('last-page-btn').name
-            // create an object to hold the form data
-            var formData = new FormData(form);
-            console.log(formData);
-            formData.append('page', button_name)
-            formData.append('direction', 'last')
-
-
-            // log the form data to the console for debugging
-            console.log(formData);
-
-            // send the form data to the Flask server using fetch
-            fetch('/', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.text())
-                .then(responseData => {
-                    // replace the current form page with the new one
-                    document.getElementById('main').innerHTML = responseData;
-                })
-                .catch(error => console.error(error));
-        };
-    </script>
+    <script type="text/javascript" src="static/validator_functions.js"></script>
+    <script type="text/javascript" src="static/analysis_functions.js"></script>
 </body>
 
 </html>

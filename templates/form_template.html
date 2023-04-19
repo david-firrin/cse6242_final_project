@@ -1,36 +1,42 @@
-<form id="my-form" class="inputs">
+<form id="my-form" class="inputs" name="{{ form_data.current_page }}">
     <div class="input-title">
-        <h2>Please Enter Your Car Details Below</h2>
+        <h2 id="prompt">{{ form_data.prompt }}</h2>
+        <p id="prompt_instructions">{{ form_data.prompt_instructions }}</p>
     </div>
     <div class="form-inputs">
         {% for input in form_data.inputs %}
 
         {% if input.data != None -%}
-        <label>{{ input.label }}</label>
-        <select id={{ input.current_page }} class="custom-select" name='my-form'>
+        <!-- <label>{{ input.label }}</label> -->
+        <select class="form-select" name='my-form'>
             {% for element in input.data %}
+            {% if form_data.current_page == 'car_model' or form_data.current_page == 'car_manufacturer'-%}
             <option value="{{ element }}">{{ element }}</li>
+                {% else -%}
+            <option value="{{ element }}">{{ element|title }}</li>
+                {% endif %}
                 {% endfor %}
         </select>
         {% else -%}
-        <label>{{ input.label }}</label>
-        <input name="my-form" type="text" class="form-control">
+        <!-- <label>{{ input.label }}</label> -->
+        <input id="input_number" text="number" name="my-form" type="text" class="form-control">
 
         {% endif %}
 
         {% endfor %}
-        <button type="submit" id="last-page-btn" name={{ form_data.last_page }} class="btn btn-primary btn-text"
-            onclick="handleLast(event)">
-            Go Back
-        </button>
-        <button type="submit" id="next-page-btn" name={{ form_data.next_page }} class="btn btn-primary btn-text"
-            onclick="handleNext(event)">
-            Next
-        </button>
+        <div class="buttons">
+            {% if form_data.current_page != 'car_manufacturer' %}
+            <button type="submit" id="last-page-btn" name={{ form_data.last_page }} class="btn btn-primary btn-text"
+                onclick="handleLast(event)">
+                Go Back
+            </button>
+            {% else -%}
+            {% endif %}
+            <button type="submit" id="next-page-btn" name={{ form_data.next_page }} class="btn btn-primary btn-text"
+                onclick="handleNext(event)">
+                Next
+            </button>
+
+        </div>
     </div>
 </form>
-
-<script>
-    var data = JSON.parse('{{ form_data | tojson | safe }}');
-    console.log(data);
-</script>

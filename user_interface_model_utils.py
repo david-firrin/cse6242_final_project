@@ -122,7 +122,7 @@ class UserInterfaceModelUtils:
             int(cluster),
         ])
     
-    def get_n_most_important_variables(self, X: List, n_vars: int = 3):
+    def get_n_most_important_variables(self, X: List, n_vars: int = 5):
 
         '''
         Get n most variables with largest contribution to car's predicted price
@@ -178,7 +178,20 @@ class UserInterfaceModelUtils:
         elif X[6] in self.models_top['smallest']:
             importance = [('model', '-')] + importance
 
+        importance = [('Car Age' if key == 'car_age_years' else key, value) for key, value in importance]
+        importance = [('Car Miles' if key == 'miles_10k' else key, value) for key, value in importance]
+        importance = [('Car Condition' if key == 'condition' else key, value) for key, value in importance]
+        importance = [('Car Cylinders' if key == 'cylinders' else key, value) for key, value in importance]
+        importance = [('Car Transmission' if key == 'transmission' else key, value) for key, value in importance]
+        importance = [('Title Status' if key == 'title_status' else key, value) for key, value in importance]
+        importance = [('Car Drive' if key == 'drive' else key, value) for key, value in importance]
+        importance = [('Car Type' if key == 'type' else key, value) for key, value in importance]
+        importance = [('Car Manufacturer' if key == 'manufacturer' else key, value) for key, value in importance]
+        importance = [('Car Model' if key == 'model' else key, value) for key, value in importance]
+
         importance = importance[:n_vars]
+
+
         return {
             i: {'variable': v[0], 'effect': v[1]} 
             for i, v in enumerate(importance)

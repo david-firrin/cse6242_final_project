@@ -72,7 +72,11 @@ const plot_mileage_age_curve_2 = new Chart(ctx2, {
                 position: 'bottom',
                 title: {
                     display: true,
-                    text: 'Number of Miles (in Thousands)'
+                    color: 'white',
+                    text: 'Number of Miles (in Thousands)',
+                    font: {
+                        size: 15
+                    }
                 }
             },
             'x-axis-2': {
@@ -80,21 +84,30 @@ const plot_mileage_age_curve_2 = new Chart(ctx2, {
                 position: 'top',
                 title: {
                     display: true,
-                    text: 'Age of Car (in Years)'
+                    text: 'Age of Car (in Years)',
+                    color: 'white',
+                    font: {
+                        size: 15
+                    }
                 }
             },
             y: {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Multiplicative Effect on Predicted Price of Used Car'
+                    color: 'white',
+                    text: 'Multiplicative Effect on Used Car Price',
+                    font: {
+                        size: 15
+                    }
                 }
             }
         },
         plugins: {
             title: {
                 display: true,
-                text: 'Partial Dependence of Price on Miles Driven and Age of Car',
+                color: 'white',
+                text: ['Partial Dependence of Price on Miles Driven', 'and Age of Car'],
                 font: {
                     size: 16,
                 }

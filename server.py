@@ -11,6 +11,18 @@ app.secret_key = 'some_secret_key'
 
 
 class AnalyzeForm(Form):
+    '''
+    car manufacturer - 1
+    car model - 1
+    car type - 1
+
+    car fuel
+    car cylinders
+    car transmission
+    car drive
+
+
+    '''
     car_manufacturer = StringField('Select Car Manufacturer', [
                                    validators.DataRequired()])
     car_model = StringField('Select Car Model', [validators.DataRequired()])
@@ -41,6 +53,8 @@ def home():
                 'last_page': None,
                 'current_page':  page_name,
                 'next_page': 'car_model',
+                'prompt': "What brand is your car?",
+                'prompt_instructions': "Please select your car's manufacturer from the dropdown below.",
                 'inputs': [
                     {
                         'label':  'Please select a car manufacturer',
@@ -64,6 +78,8 @@ def home():
                 'last_page': 'car_manufacturer',
                 'current_page':  page_name,
                 'next_page': 'car_fuel',
+                'prompt': "What's your car's model?",
+                'prompt_instructions': "Please select your car's model from the dropdown below.",
                 'inputs': [
                     {
                         'label':  'Please select a car model',
@@ -76,17 +92,30 @@ def home():
             # Get the car model depending on whether next/back button pushed
             if request.form['direction'] == 'next':
                 selected_car_model = request.form['my-form']
+                car_type = df[df['model'] ==
+                              selected_car_model]['type'].unique()
+                # pdb.set_trace()
+                if len(car_type) == 1:
+                    session['car_type'] = car_type[0]
+                else:
+                    print('make car type separate')
+
                 session['car_model'] = request.form['my-form']
+
             elif request.form['direction'] == 'last':
                 selected_car_model = session['car_model']
             print(session)
             # Filter Data
             car_fuel_types = df[df['model'] == selected_car_model]
             car_fuel_types = sorted(car_fuel_types['fuel'].unique())
+            # Remove 'nan' values
+            car_fuel_types = [x for x in car_fuel_types if 'nan' not in x]
             form_data = {
                 'last_page': 'car_model',
                 'current_page':  page_name,
                 'next_page': 'car_cylinders',
+                'prompt': 'What kind of fuel does your car take?',
+                'prompt_instructions': 'Please select a fuel type from the dropdown below.',
                 'inputs': [
                     {
                         'label': "Please select your car's energy source",
@@ -111,10 +140,15 @@ def home():
             car_cylinder_numbers = df[filter_1 & filter_2]
             car_cylinder_numbers = sorted(
                 car_cylinder_numbers['cylinders'].unique())
+            # Remove 'nan' value
+            car_cylinder_numbers = [
+                x for x in car_cylinder_numbers if 'nan' not in x]
             form_data = {
                 'last_page': 'car_fuel',
                 'current_page':  page_name,
                 'next_page': 'car_transmission',
+                'prompt': 'How many cylinders does your car have?',
+                'prompt_instructions': "Please select your car's number of cylinders from the dropdown below.",
                 'inputs': [
                     {
                         'label': "Please select your car's number of cylinders",
@@ -144,6 +178,8 @@ def home():
                 'last_page': 'car_cylinders',
                 'current_page':  page_name,
                 'next_page': 'car_drive',
+                'prompt': "Is your car an automatic, or manual?",
+                'prompt_instructions': "Please select whether your car is an automatic, stick shift, or other from the dropdown below.",
                 'inputs': [
                     {
                         'label': "Please select your car's transmission type",
@@ -167,11 +203,15 @@ def home():
             filter_2 = df['transmission'] == selected_car_transmission
             car_drive = df[filter_1 & filter_2]
             car_drive = sorted(car_drive['drive'].unique())
-
+            # Remove 'nan' values from output
+            car_drive = [x for x in car_drive if 'nan' not in x]
             form_data = {
                 'last_page': 'car_transmission',
                 'current_page':  page_name,
                 'next_page': 'car_miles',
+                'prompt': "What's your car's drive type?",
+                'prompt_instructions': "Please select whether your car is Front Wheel Drive(FWD), Rear-Wheel Drive(RWD) \
+                                        or Four Drive(4WD) from the dropdown below.",
                 'inputs': [
                     {
                         'label': "Please select your car's drive type",
@@ -191,6 +231,8 @@ def home():
                 'last_page': 'car_drive',
                 'current_page':  page_name,
                 'next_page': 'car_years',
+                'prompt': "How many miles has your car racked up?",
+                'prompt_instructions': "Please enter the total number of miles on your car below.",
                 'inputs': [
                     {
                         'label': "Please input your car's miles",
@@ -210,10 +252,12 @@ def home():
                 'last_page': 'car_miles',
                 'current_page':  page_name,
                 'next_page': 'car_condition',
+                'prompt': "What year is your car?",
+                'prompt_instructions': "Please enter the year your car was made below.",
                 'inputs': [
                     {
                         'label': "Please input your car's year",
-                        'data':  None
+                        'data':  [year for year in range(1950, 2023)]
                     }
                 ]
             }
@@ -225,14 +269,17 @@ def home():
             elif request.form['direction'] == 'last':
                 selected_car_years = session['car_years']
             car_condition = sorted(df['condition'].unique())
+            print(car_condition)
             form_data = {
                 'last_page': 'car_years',
                 'current_page':  page_name,
                 'next_page': 'car_color',
+                'prompt': "How would you describe the condition of your car?",
+                'prompt_instructions': "Please choose the option that best describes your vehicle's condition using the dropdown below.",
                 'inputs': [
                     {
                         'label': "Please input your car's condition",
-                        'data':  car_condition
+                        'data':  ['new', 'like new', 'excellent', 'good', 'fair', 'salvage']
                     }
                 ]
             }
@@ -244,13 +291,16 @@ def home():
             elif request.form['direction'] == 'last':
                 selected_car_condition = session['car_condition']
             car_color = sorted(df['paint_color'].unique())
+            car_color = [x for x in car_color if 'nan' not in x]
             form_data = {
                 'last_page': 'car_condition',
                 'current_page':  page_name,
                 'next_page': 'car_value',
+                'prompt': "What color is your car?",
+                'prompt_instructions': "Please choose the option that is closest to the color of your car.",
                 'inputs': [
                     {
-                        'label': "Please input your car's condition",
+                        'label': "Please input your car's color",
                         'data':  car_color
                     }
                 ]
@@ -266,6 +316,8 @@ def home():
                 'last_page': 'car_color',
                 'current_page':  page_name,
                 'next_page': 'check_inputs',
+                'prompt': "What is the value of the car you're looking to buy or sell?",
+                'prompt_instructions': "Please input a valid number for the value of the car you're looking to buy or sell",
                 'inputs': [
                     {
                         'label': "Please input your car's value",
@@ -279,9 +331,9 @@ def home():
             if request.form['direction'] == 'next':
                 selected_car_value = request.form['my-form']
                 session['car_value'] = float(selected_car_value)
-            elif request.form['direction'] == 'last':
-                selected_car_value = session['car_value']
-            inputted_data = Server_Analyze().encode_data(session)
+
+            inputted_data = Server_Analyze().encode_data(session, as_list=False)
+            inputted_data['car_value'] = session['car_value']
             form_data = {
                 'last_page': 'car_value',
                 'current_page': page_name,
@@ -292,6 +344,7 @@ def home():
                                    form_data=form_data)
 
         elif page_name == 'analyze':
+            inputted_data = Server_Analyze().encode_data(session, as_list=False)
             car_value_prediction = Server_Analyze().PredictCarPrice(session)
             plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
             important_parameters = Server_Analyze().GetCarParameters(session)
@@ -299,7 +352,8 @@ def home():
                 'current_page': page_name,
                 'car_value_predicticion': car_value_prediction,
                 'plot_mileage_age_curves': plot_mileage_age_curves,
-                'important_parameters': important_parameters
+                'important_parameters': important_parameters,
+                'inputs' : inputted_data
             }
             return render_template('analyze.html',
                                    form_data=form_data)
@@ -311,26 +365,33 @@ def home():
         session_id = request.cookies.get('session_id')
         if not session_id:
             session_id = str(uuid.uuid4())
-        # <!-- miles_10kx  car_age_yearsx  conditionx  title_status  fuelx  typex  modelx  manufacturerx  cylindersx  drive  transmission  paint_color        long        lat -->
+
+        form_data = {
+            'last_page': None,
+            'current_page': 'opening',
+            'next_page': None,
+            'inputs': None
+        }
+
+        # return render_template("index.html", form_data=form_data)
+        inputted_data = Server_Analyze().encode_data(session, as_list=False)
+        car_value_prediction = Server_Analyze().PredictCarPrice(session)
+        plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
+        important_parameters = Server_Analyze().GetCarParameters(session)
+        anomoly_detection = Server_Analyze().Anomaly_Detection(session)
         # pdb.set_trace()
-        # df = pd.read_pickle(
-        #     "data/transform/step_2_preprocessed_data/01_df_no_encoding.pkl")
-        # car_manufacturers = sorted(df['manufacturer'].unique())
-        # car_models = sorted(df['model'].unique())
-        # car_types = sorted(df['type'].unique())
-        # car_condition = sorted(df['model'].unique())
-        # car_cylinders = sorted(df['cylinders'].unique())
-        # car_fuel = sorted(df['fuel'].unique())
-
-        return render_template("index.html")
-
-        #    form=form,
-        #    car_manufacturers=car_manufacturers,
-        #    car_models=car_models,
-        #    car_types=car_types,
-        #    car_cylinders=car_cylinders,
-        #    car_fuel=car_fuel
+        form_data = {
+            'current_page': None,
+            'car_value_prediction': car_value_prediction,
+            'plot_mileage_age_curves': plot_mileage_age_curves,
+            'important_parameters': important_parameters,
+            'inputs' : inputted_data,
+            'anomoly_detection' : str(anomoly_detection)
+        }
+        # print(form_data)
+        return render_template('analyze.html',
+                               form_data=form_data)
 
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=2500, debug=True)
+    app.run(host="localhost", port=1500, debug=True)

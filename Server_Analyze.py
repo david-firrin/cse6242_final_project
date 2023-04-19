@@ -27,7 +27,7 @@ class Server_Analyze(UserInterfaceModelUtils):
         self.y_test = test['price']
         # return X_train, X_test, y_train, y_test
 
-    def encode_data(self, session, as_list=True):
+    def encode_data(self, session, as_list=True, alter=False):
         form_data = {
             'car_miles': session['car_miles'],  # car miles
             'car_years': session['car_years'],  # car year
@@ -36,7 +36,7 @@ class Server_Analyze(UserInterfaceModelUtils):
             'car_fuel': session['car_fuel'],  # fuel
             'car_type': session['car_type'],  # type
             'car_model': session['car_model'],  # car model
-            'car_manufacturer': session['car_manufacturer'], # car manufacturer
+            'car_manufacturer': session['car_manufacturer'],
             'car_cylinders': session['car_cylinders'],  # cylinders
             'car_drive': session['car_drive'],  # drive
             'car_transmission': session['car_transmission'],  # transmission
@@ -44,10 +44,12 @@ class Server_Analyze(UserInterfaceModelUtils):
             'longitude': -85.4800,  # longitude
             'latitude': 32.590  # latitude
         }
+        if alter == True:
+            form_data['car_miles'] = form_data['car_miles'] / 10_000
+            form_data['car_years'] = 2023 - form_data['car_years']
         if as_list == True:
             form_data = list(form_data.values())
         return form_data
-       
 
     def GetCarParameters(self, session):
         encoded_data = self.encode_data(session)
@@ -59,7 +61,7 @@ class Server_Analyze(UserInterfaceModelUtils):
         '''
         miles_10k  car_age_years  condition  title_status  fuel  type  model  manufacturer  cylinders  drive  transmission  paint_color        long        lat
         '''
-        encoded_data = self.encode_data(session)
+        encoded_data = self.encode_data(session, alter=True)
         # y_test_pred = self.gam_model.predict(encoded_data)
         # predicted_car_price = round(float(y_test_pred[0]))
 
@@ -74,11 +76,18 @@ class Server_Analyze(UserInterfaceModelUtils):
         # elif predicted_car_price < user_inputted_car_price:
         #     deal_assessment = 'bad'
         car_value_prediction = {
-            'predicted_car_price': predicted_car_price,
+            'predicted_car_price': predicted_car_price['prediction'],
             'user_inputted_car_price': user_inputted_car_price,
             'deal_assessment': 'good'
         }
         return car_value_prediction
+
+    def Percentiles(self, session):
+        '''
+        Get the percentiles of the car's price per make and model
+        'Your car is 35% more expensive than other car's of the same make and model'
+        'Your car is 55% more expensive than other car's that are in the same condition'
+        '''
 
     def PlotMileageAgeCurve(self, form_request):
         miles_pd_X = self.gam_model.generate_X_grid(term=0)[:, 0]
@@ -86,25 +95,6 @@ class Server_Analyze(UserInterfaceModelUtils):
 
         miles_pd_log = self.gam_model.partial_dependence(term=0)
         age_pd_log = self.gam_model.partial_dependence(term=1)
-
-        # encoded_data = self.encode_data(form_request)
-        # user_miles = encoded_data.iloc[0]['miles_10k']
-        # user_car_age = encoded_data.iloc[0]['car_age_years']
-
-        # def get_user_miles_PD(user_miles):
-        #     X_grid = self.gam_model.generate_X_grid(term=0)
-        #     X_grid[:, 0] = user_miles
-        #     pd_value = self.gam_model.partial_dependence(term=0, X=X_grid)
-        #     return np.exp(pd_value[0])
-
-        # def get_user_car_age_PD(user_car_age):
-        #     X_grid = self.gam_model.generate_X_grid(term=1)
-        #     X_grid[:, 1] = user_car_age
-        #     pd_value = self.gam_model.partial_dependence(term=1, X=X_grid)
-        #     return np.exp(pd_value[0])
-
-        # user_car_age_PD = get_user_car_age_PD(user_car_age)
-        # user_miles_PD = get_user_miles_PD(user_miles)
 
         miles_pd_exp = np.exp(miles_pd_log)
         age_pd_exp = np.exp(age_pd_log)
@@ -115,27 +105,53 @@ class Server_Analyze(UserInterfaceModelUtils):
             'miles_pd_exp': miles_pd_exp.tolist(),
             'age_pd_exp': age_pd_exp.tolist(),
             'miles_pd_log': miles_pd_log.tolist(),
-            'age_pd_log': age_pd_log.tolist(),
-            # 'user_car_age_PD': {'user_input': user_miles, 'PD': user_car_age_PD},
-            # 'user_miles_PD': {'user_input': user_car_age, 'PD': user_miles_PD}
+            'age_pd_log': age_pd_log.tolist()
         }
         return plot_mileage_age_curves
 
-    # def PlotResiduals(self, form_request):
-    #     y_train_hat = self.gam_model.predict_mu(self.X_train)
-    #     residuals = self.gam_model.deviance_residuals(
-    #         self.X_train, self.y_train)
+    def Anomaly_Detection(self, session):
+        with open('data/anomoly_files/ad_model.pkl', 'rb') as model:
+            ad_model = pickle.load(model)
 
-    #     # random_resid_idxs = random.sample(range(len(residuals)), 10)
-    #     # residuals_subset = [residuals[i] for i in random_resid_idxs]
+        with open('data/anomoly_files/ad_label_encoders.pkl', 'rb') as model:
+            ad_label_encoders = pickle.load(model)
 
-    #     # pdb.set_trace()
-    #     plot_residuals = {
-    #         # 'X_train': self.X_train,
-    #         # 'X_test': self.X_test,
-    #         # 'Y_train': self.y_train,
-    #         # 'Y_test': self.y_test,
-    #         'y_train_hat': y_train_hat.tolist(),
-    #         'residuals': residuals.tolist()
-    #     }
-    #     return plot_residuals
+        def is_anomaly(x_input, encoders, ad_model):
+            # x_input needs to be a dataframe and
+            # have columns miles, car_age_years, model, manufacturer, cylinders
+            actual = x_input['miles']
+            x_input = x_input.iloc[:, 1:]
+
+            factor_vars = [
+                'model',
+                'manufacturer',
+                'cylinders']
+
+            for var in factor_vars:
+                x_input[var] = encoders[var].transform(x_input[var])
+
+            transformed_input = x_input
+
+            pred_mileage = ad_model.predict(transformed_input)
+            # print(pred_mileage)
+
+            return pred_mileage > actual * 1.4
+
+        # example invocation
+        # Create a dictionary with your input data
+        # data = {'miles': [32485.0], 'car_age_years': [2.459],
+        #         'model': ['Tundra'], 'manufacturer': ['Toyota'],
+        #         'cylinders': ['4 cylinders']}
+
+        data = self.encode_data(session, as_list=False)
+        # Create a dataframe from the dictionary
+        x_input = pd.DataFrame([data])
+        
+        x_input = x_input[['car_miles', 'car_years',
+                           'car_model', 'car_manufacturer', 'car_cylinders']]
+        x_input.columns = ['miles', 'car_age_years',
+                           'model', 'manufacturer', 'cylinders']
+        anomoly = is_anomaly(x_input, ad_label_encoders, ad_model)
+        anomoly = anomoly[0]
+        # pdb.set_trace()
+        return anomoly
