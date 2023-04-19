@@ -1,6 +1,6 @@
 
 
-// console.log(data)
+console.log(data)
 car_value_prediction_data = data['car_value_prediction']
 console.log(car_value_prediction_data)
 car_predicted_price = car_value_prediction_data['predicted_car_price']
@@ -147,9 +147,9 @@ kpi_4_variable_explanation.innerHTML = get_explanation(kpi_variables[3]['variabl
 // inputted car data
 car_manufacturer = data['inputs']['car_manufacturer']
 car_model = data['inputs']['car_model']
-car_type = data['inputs']['car_type']
+// car_type = data['inputs']['car_type']
 var input_car_manufacturer_model_type = document.getElementById('input_car_manufacturer_model_type');
-input_car_manufacturer_model_type.innerHTML = `${car_manufacturer} ${car_model} ${car_type}`
+input_car_manufacturer_model_type.innerHTML = `${car_manufacturer} ${car_model}`
 
 car_years = data['inputs']['car_years']
 var inputted_car_year_text = document.getElementById('inputted_car_year_text');

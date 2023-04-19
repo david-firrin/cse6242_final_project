@@ -343,20 +343,23 @@ def home():
             return render_template('check_inputs.html',
                                    form_data=form_data)
 
-        elif page_name == 'analyze':
-            inputted_data = Server_Analyze().encode_data(session, as_list=False)
-            car_value_prediction = Server_Analyze().PredictCarPrice(session)
-            plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
-            important_parameters = Server_Analyze().GetCarParameters(session)
-            form_data = {
-                'current_page': page_name,
-                'car_value_predicticion': car_value_prediction,
-                'plot_mileage_age_curves': plot_mileage_age_curves,
-                'important_parameters': important_parameters,
-                'inputs' : inputted_data
-            }
-            return render_template('analyze.html',
-                                   form_data=form_data)
+        # elif page_name == 'analyze':
+        #     inputted_data = Server_Analyze().encode_data(session, as_list=False)
+        #     car_value_prediction = Server_Analyze().PredictCarPrice(session)
+        #     plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
+        #     important_parameters = Server_Analyze().GetCarParameters(session)
+        #     anomoly_detection = Server_Analyze().Anomaly_Detection(session)
+        #     # pdb.set_trace()
+        #     form_data = {
+        #         'current_page': None,
+        #         'car_value_prediction': car_value_prediction,
+        #         'plot_mileage_age_curves': plot_mileage_age_curves,
+        #         'important_parameters': important_parameters,
+        #         'inputs': inputted_data,
+        #         'anomoly_detection': str(anomoly_detection)
+        #     }
+        #     return render_template('analyze.html',
+        #                            form_data=form_data)
 
         return render_template('form_template.html',
                                form_data=form_data)
@@ -373,25 +376,27 @@ def home():
             'inputs': None
         }
 
-        # return render_template("index.html", form_data=form_data)
-        inputted_data = Server_Analyze().encode_data(session, as_list=False)
-        car_value_prediction = Server_Analyze().PredictCarPrice(session)
-        plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
-        important_parameters = Server_Analyze().GetCarParameters(session)
-        anomoly_detection = Server_Analyze().Anomaly_Detection(session)
-        # pdb.set_trace()
-        form_data = {
-            'current_page': None,
-            'car_value_prediction': car_value_prediction,
-            'plot_mileage_age_curves': plot_mileage_age_curves,
-            'important_parameters': important_parameters,
-            'inputs' : inputted_data,
-            'anomoly_detection' : str(anomoly_detection)
-        }
-        # print(form_data)
-        return render_template('analyze.html',
-                               form_data=form_data)
+        return render_template("index.html", form_data=form_data)
 
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    inputted_data = Server_Analyze().encode_data(session, as_list=False)
+    car_value_prediction = Server_Analyze().PredictCarPrice(session)
+    plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
+    important_parameters = Server_Analyze().GetCarParameters(session)
+    anomoly_detection = Server_Analyze().Anomaly_Detection(session)
+    # pdb.set_trace()
+    form_data = {
+        'current_page': None,
+        'car_value_prediction': car_value_prediction,
+        'plot_mileage_age_curves': plot_mileage_age_curves,
+        'important_parameters': important_parameters,
+        'inputs': inputted_data,
+        'anomoly_detection': str(anomoly_detection)
+    }
+    return render_template('analyze.html',
+                            form_data=form_data)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=1500, debug=True)
+    app.run(host="localhost", port=1750, debug=True)

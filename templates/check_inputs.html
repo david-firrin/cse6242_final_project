@@ -25,7 +25,7 @@
     </div>
     <div id="main"> -->
 
-<form id="my-form" class="inputs">
+<form id="my-form" class="inputs" method='POST' action="/analyze">
     <div class="input-title">
         <h2>Take a quick look and double check the car details you gave us below.</h2>
         <p>Whenever you're good to go, hit the 'analyze' button and we'll give you our best guess on what your
@@ -87,8 +87,7 @@
             onclick="handleLast(event)">
             Go Back
         </button>
-        <button type="submit" id="next-page-btn" name={{ form_data.next_page }} class="btn btn-primary btn-text"
-            onclick="handleNext(event)">
+        <button type="submit" id="next-page-btn" name='analyze' class="btn btn-primary btn-text">
             Analyze
         </button>
     </div>

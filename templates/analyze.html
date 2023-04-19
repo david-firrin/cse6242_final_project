@@ -25,15 +25,7 @@
         </div>
     </div>
 
-    <form id="my-form" class="inputs">
-        <div class="input-title">
-            <h2>Let's get started in analyzing the price of your car!</h2>
-        </div>
-        <button type="submit" id="next-page-btn" name="car_manufacturer" class=" btn btn-primary btn-text"
-            onclick="handleNext(event)">
-            Re-Analyze
-        </button>
-    </form>
+
 
     <div class="analysis_container">
         <div class="model-header">
@@ -92,8 +84,11 @@
             <canvas id="plot_mileage_age_curve_exp"></canvas>
         </div>
         <div class="PD_model_explanation">
-            <p>The above chart shows how the listing price of a car decreases with respect to its odometer reading and
-                age.
+            <p>The above chart shows how the car price decreases with respect to its odometer reading and age.
+                For instance, the mileage partial dependence values for 5 and 10 years are about 4 and 2.5 respectively:
+                therefore, given two cars A and B with ages of 5 years and 10 years respectively, but which are
+                otherwise identical, our model will predict car A to have a value of 4 / 2.5 = 1.6 times the value of
+                car B.
             </p>
         </div>
         <div id="kpi_title">
@@ -121,10 +116,23 @@
             <p id="kpi_4_variable_explanation"></p>
         </div>
         <div id="kpi_4_variable_exp"></div>
+        <div id="reanalyze">
+            <form id="my-form" class="inputs" method='GET' action="/"> 
+                <!-- <div id="reanalyze_title">
+                    <h4>Click the button below to re-analyze a car!</h4>
+                </div> -->
+                <button type="submit" id="reanalyze_button" name="re-analyze" class="btn btn-primary btn-text"
+                    onclick="handleNext(event)">
+                    Re-Analyze
+                </button>
+            </form>
+        </div>
     </div>
+
+
     <script>
         var data = JSON.parse('{{ form_data | tojson | safe }}');
-
+        console.log(data);
     </script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript" src="static/analysis_functions.js"></script>

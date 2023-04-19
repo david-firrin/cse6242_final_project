@@ -39,7 +39,9 @@ body {
     left: 0;
     right: 0;
     text-align: center;
+
 }
+
 
 .icon {
     position: absolute;
@@ -197,6 +199,7 @@ body {
     margin-bottom: 2px;
 }
 
+
 @keyframes spin {
     from {
         transform: rotate(0deg);
@@ -213,16 +216,17 @@ body {
 }
 
 .analysis_container {
+    // margin-top: 40px;
     display: grid;
-    margin: 0 auto;
+    margin: 30px auto;
     padding: 10px 10px 0 10px;
     border: 3px solid black;
     border-radius: 25px;
-    grid-template-rows: 0.1fr 0.1fr repeat(7, 0.25fr);
+    grid-template-rows: 0.1fr 0.1fr repeat(7, 0.25fr) 0.05fr;
     grid-template-columns: repeat(12, 0.5fr);
     grid-gap: 20px;
     width: 90%;
-    height: 900px;
+    height: 1100px;
     max-width: 1300px;
     min-width: 1250px;
 
@@ -257,6 +261,7 @@ body {
         grid-column: 1/5;
         grid-row: 4/10;
         text-align: center;
+        // padding: 50px;
     }
 
     & .car_image_container {
@@ -284,8 +289,10 @@ body {
         align-items: center;
         grid-column: 1/5;
         grid-row: 4/6;
-        font-size: 50px;
+        font-size: 30px;
         font-weight: bolder;
+        text-align: center;
+        
     }
 
     & #inputted_car_year {
@@ -328,7 +335,9 @@ body {
         font-weight: bolder;
         border: 2px solid black;
         border-radius: 10px;
-        margin: 5px;
+        margin: 10px 5px 5px 5px;
+        padding: 5px;
+        height: 90%
     }
 
 
@@ -368,11 +377,12 @@ body {
         border-radius: 5px;
         font-weight: bold;
         font-size: 30px;
-        color: black;
         border: 2px solid white;
         border-radius: 10px;
-        background-color: rgb(98, 98, 98);
+        background-color: rgb(75, 75, 75);
         padding: 5px;
+        color: white;
+        margin: 0;
 
         & .label {
             font-size: 18px;
@@ -406,6 +416,7 @@ body {
         text-align: center;
         justify-content: center;
         margin: auto;
+        font-size: 12px;
     }
 
     .actual-price,
@@ -442,7 +453,7 @@ body {
             text-align: center;
             font-style: italic;
             font-weight: normal;
-            margin: 0;
+            // margin: 0;
         }
     }
 
@@ -582,4 +593,25 @@ body {
         padding: 5px;
         color: white;
     }
+}
+
+#reanalyze {
+    text-align: center;
+    grid-column: 4/10;
+    color: white;
+    // border: 3px solid black;
+    padding: 20px;
+    border-radius: 30px;
+
+    & #input-title {
+        text-align: center;
+        margin: 0 auto;
+        font-size: 20px;
+    }
+
+    & #reanalyze_button {
+        margin: 0 auto;
+        width: 300px;
+    }
+
 }

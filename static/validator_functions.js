@@ -4,11 +4,13 @@
 function handleNext(event) {
     event.preventDefault(); // prevent the form from submitting normally
     var form = document.getElementById("my-form");
-    // console.log(form)
+    // console.log(form.name)
+    // console.log(event)
+    console.log(event['target']['name'])
     // Get the Button value
     var button_name = document.getElementById('next-page-btn').name
 
-    // create an object to hold the form data
+    // create an object to hold the form data 
     var formData = new FormData(form);
     // console.log(formData);
     formData.append('page', button_name)
@@ -43,6 +45,13 @@ function handleNext(event) {
             formData.set('my-form', inputted_value)
             nextPage(formData)
         }
+    } else if (event['target']['name'] == 'analyze') {
+        // event originalTarget
+        nextPage(formData)
+        const script = document.createElement('script');
+        script.src = 'static/analysis_functions.js';
+        document.body.appendChild(script);
+
     } else {
         nextPage(formData)
     }
@@ -56,10 +65,6 @@ function handleNext(event) {
             .then(responseData => {
                 // replace the current form page with the new one
                 document.getElementById('main').innerHTML = responseData;
-
-                // const script = document.createElement('script');
-                // script.src = 'static/validator_functions.js';
-                // document.head.appendChild(script);
 
             })
             .catch(error => console.error(error));

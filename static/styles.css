@@ -177,15 +177,15 @@ body {
 
 .analysis_container {
   display: grid;
-  margin: 0 auto;
+  margin: 30px auto;
   padding: 10px 10px 0 10px;
   border: 3px solid black;
   border-radius: 25px;
-  grid-template-rows: 0.1fr 0.1fr repeat(7, 0.25fr);
+  grid-template-rows: 0.1fr 0.1fr repeat(7, 0.25fr) 0.05fr;
   grid-template-columns: repeat(12, 0.5fr);
   grid-gap: 20px;
   width: 90%;
-  height: 900px;
+  height: 1100px;
   max-width: 1300px;
   min-width: 1250px;
 }
@@ -237,8 +237,9 @@ body {
   align-items: center;
   grid-column: 1/5;
   grid-row: 4/6;
-  font-size: 50px;
+  font-size: 30px;
   font-weight: bolder;
+  text-align: center;
 }
 .analysis_container #inputted_car_year {
   grid-column: 3/5;
@@ -275,7 +276,9 @@ body {
   font-weight: bolder;
   border: 2px solid black;
   border-radius: 10px;
-  margin: 5px;
+  margin: 10px 5px 5px 5px;
+  padding: 5px;
+  height: 90%;
 }
 .analysis_container .actual_price {
   grid-column: 1/4;
@@ -309,11 +312,12 @@ body {
   border-radius: 5px;
   font-weight: bold;
   font-size: 30px;
-  color: black;
   border: 2px solid white;
   border-radius: 10px;
-  background-color: rgb(98, 98, 98);
+  background-color: rgb(75, 75, 75);
   padding: 5px;
+  color: white;
+  margin: 0;
 }
 .analysis_container .predicted_price .label,
 .analysis_container .actual_price .label,
@@ -349,6 +353,7 @@ body {
   text-align: center;
   justify-content: center;
   margin: auto;
+  font-size: 12px;
 }
 .analysis_container .actual-price,
 .analysis_container .predicted-price {
@@ -381,7 +386,6 @@ body {
   text-align: center;
   font-style: italic;
   font-weight: normal;
-  margin: 0;
 }
 .analysis_container #kpi_1 {
   grid-row: 6/7;
@@ -501,4 +505,21 @@ body {
   border: 2px solid white;
   padding: 5px;
   color: white;
+}
+
+#reanalyze {
+  text-align: center;
+  grid-column: 4/10;
+  color: white;
+  padding: 20px;
+  border-radius: 30px;
+}
+#reanalyze #input-title {
+  text-align: center;
+  margin: 0 auto;
+  font-size: 20px;
+}
+#reanalyze #reanalyze_button {
+  margin: 0 auto;
+  width: 300px;
 }/*# sourceMappingURL=styles.css.map */
