@@ -399,4 +399,4 @@ def analyze():
                             form_data=form_data)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=2500, debug=True)
+    app.run(host="localhost", port=5500, debug=True)

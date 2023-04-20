@@ -179,7 +179,7 @@ anomoly_detection = data['anomoly_detection']
 var car_anomoly_assessment = document.querySelector('.car_anomoly_assessment .value');
 console.log(anomoly_detection)
 if (anomoly_detection == 'True') {
-    car_anomoly_assessment.innerHTML = 'Anomoly Detected!'
+    car_anomoly_assessment.innerHTML = 'Anomaly Detected!'
 } else {
     car_anomoly_assessment.innerHTML = 'None Detected!'
 }
