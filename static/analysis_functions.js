@@ -39,11 +39,13 @@ assessment_value_element.innerHTML = priceAssessmentValue.toLocaleString('en-US'
 
 // Deal Assessment
 
-var predicted_car_price = car_value_prediction_data['deal_assessment']
-var actual_car_price = data['inputs']['car_value']
+// var deal_assessment = car_value_prediction_data['deal_assessment']
+var actual_car_price = car_value_prediction_data['user_inputted_car_price']
+var predicted_car_price = car_value_prediction_data['predicted_car_price']
 var header = document.querySelector('.model-header h2');
 var recommendation_div = document.getElementById('recommendation')
-
+console.log(predicted_car_price)
+console.log(actual_car_price)
 if (predicted_car_price > actual_car_price) {
     var deal_assessment = 'undervalued'
     recommendation_div.innerHTML = `If you plan on selling this car, you should consider selling it at a higher price,

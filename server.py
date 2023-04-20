@@ -45,7 +45,6 @@ def home():
     form = AnalyzeForm(request.form)
     df = pd.read_pickle(
         "data/transform/step_2_preprocessed_data/01_df_no_encoding.pkl")
-
     if request.method == "POST":
         page_name = request.form['page']
         if page_name == 'car_manufacturer':
@@ -381,6 +380,7 @@ def home():
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
+    # pdb.set_trace()
     inputted_data = Server_Analyze().encode_data(session, as_list=False)
     car_value_prediction = Server_Analyze().PredictCarPrice(session)
     plot_mileage_age_curves = Server_Analyze().PlotMileageAgeCurve(session)
@@ -399,4 +399,4 @@ def analyze():
                             form_data=form_data)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=1750, debug=True)
+    app.run(host="localhost", port=2500, debug=True)
