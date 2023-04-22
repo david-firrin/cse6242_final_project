@@ -11,12 +11,12 @@ from user_interface_model_utils import UserInterfaceModelUtils
 
 class Server_Analyze(UserInterfaceModelUtils):
     def __init__(self):
-        with open('data/transform/step_3_GAM_model/gam_1.pkl', 'rb') as f_gam:
+        with open('data/GAM_model_files/gam_1.pkl', 'rb') as f_gam:
             self.gam_model = pickle.load(f_gam)
 
-        with open('data/transform/step_2_preprocessed_data/01_df.pkl', 'rb') as f_gam:
-            self.encoded_data = pickle.load(f_gam)
-        self.get_training_data(self.encoded_data)
+        # with open('data/GAM_model_files/01_df.pkl', 'rb') as f_gam:
+        #     self.encoded_data = pickle.load(f_gam)
+        # self.get_training_data(self.encoded_data)
 
     def get_training_data(self, df):
         train, test = train_test_split(df, test_size=0.20, random_state=0)

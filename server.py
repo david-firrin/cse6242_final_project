@@ -20,8 +20,6 @@ class AnalyzeForm(Form):
     car cylinders
     car transmission
     car drive
-
-
     '''
     car_manufacturer = StringField('Select Car Manufacturer', [
                                    validators.DataRequired()])
@@ -44,7 +42,7 @@ class AnalyzeForm(Form):
 def home():
     form = AnalyzeForm(request.form)
     df = pd.read_pickle(
-        "data/transform/step_2_preprocessed_data/01_df_no_encoding.pkl")
+        "data/GAM_model_files/01_df_no_encoding.pkl")
     if request.method == "POST":
         page_name = request.form['page']
         if page_name == 'car_manufacturer':
@@ -399,4 +397,4 @@ def analyze():
                             form_data=form_data)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=5500, debug=True)
+    app.run(host="localhost", port=5000, debug=True)
